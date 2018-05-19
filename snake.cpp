@@ -20,6 +20,7 @@ void LVL(int Xprint,int Yprint){
 		"Medium",		//2
 		"Hard"			//3
 	};
+
 	RECT WindowPos;
 	POINT CursPos;
 	int PosX,PosY;
@@ -36,10 +37,54 @@ void LVL(int Xprint,int Yprint){
 		GetCursorPos(&CursPos);
 		PosX = CursPos.x - WindowPos.left - XFixWind;
 		PosY = CursPos.y - WindowPos.bottom+360 - YFixWind;
-		//printf("%d , %d\n%d , %d",WindowPos.left,WindowPos.bottom-360, CursPos.x - WindowPos.left - XFixWind, CursPos.y - WindowPos.bottom+360 - YFixWind);
-
-		circle(PosX,PosY,4);
 		
+		if ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+45)&&(PosY<Yprint+80)){
+			setcolor(15);
+			outtextxy(Xprint+16,Yprint+50,">");
+			outtextxy(Xprint+68,Yprint+50,"<");
+			while ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+45)&&(PosY<Yprint+80)){
+				GetWindowRect(GetForegroundWindow(), &WindowPos);
+				GetCursorPos(&CursPos);
+				PosX = CursPos.x - WindowPos.left - XFixWind;
+				PosY = CursPos.y - WindowPos.bottom+360 - YFixWind;	
+			}
+			setcolor(0);
+			outtextxy(Xprint+16,Yprint+50,">");
+			outtextxy(Xprint+68,Yprint+50,"<");			
+		}
+		
+		if ((PosX>Xprint-4)&&(PosX<Xprint+99)&&(PosY>Yprint+75)&&(PosY<Yprint+110)){
+			setcolor(15);
+			outtextxy(Xprint+2,Yprint+80,">");
+			outtextxy(Xprint+82,Yprint+80,"<");
+			while ((PosX>Xprint-4)&&(PosX<Xprint+99)&&(PosY>Yprint+75)&&(PosY<Yprint+110)){
+				GetWindowRect(GetForegroundWindow(), &WindowPos);
+				GetCursorPos(&CursPos);
+				PosX = CursPos.x - WindowPos.left - XFixWind;
+				PosY = CursPos.y - WindowPos.bottom+360 - YFixWind;	
+			}
+			setcolor(0);
+			outtextxy(Xprint+2,Yprint+80,">");
+			outtextxy(Xprint+82,Yprint+80,"<");			
+		}		
+		
+		if ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+110)&&(PosY<Yprint+140)){
+			setcolor(15);
+			outtextxy(Xprint+16,Yprint+110,">");
+			outtextxy(Xprint+68,Yprint+110,"<");
+			while ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+110)&&(PosY<Yprint+140)){
+				GetWindowRect(GetForegroundWindow(), &WindowPos);
+				GetCursorPos(&CursPos);
+				PosX = CursPos.x - WindowPos.left - XFixWind;
+				PosY = CursPos.y - WindowPos.bottom+360 - YFixWind;	
+			}
+			setcolor(0);
+			outtextxy(Xprint+16,Yprint+110,">");
+			outtextxy(Xprint+68,Yprint+110,"<");			
+		}
+		
+		printf("%d , %d\n%d , %d",WindowPos.left,WindowPos.bottom-360, CursPos.x - WindowPos.left - XFixWind, CursPos.y - WindowPos.bottom+360 - YFixWind);
+		//circle(PosX,PosY,4);
 		system("CLS");
 	}
 	
