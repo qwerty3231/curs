@@ -11,13 +11,28 @@ const int YFixWind = 4;
 
 const int XGameWind = 360;
 const int YGameWind = 480;
-
 bool isLButtonDown()
 {
   SHORT state = GetAsyncKeyState(VK_LBUTTON);
   return (state & 0x8000) != 0;
 }
 
+void GameOver(int Speed, int Length){
+	int Score = (500-Speed)*Length;
+	setcolor(BLUE);
+	rectangle (XGameWind/2-100, YGameWind/2-100, XGameWind/2+100, YGameWind/2);
+	setfillstyle(1,BLACK);
+	floodfill(XGameWind/2,YGameWind/2-50,BLUE);
+	setcolor(WHITE);
+	settextstyle(3,HORIZ_DIR,4);
+	outtextxy(XGameWind/2-83,YGameWind/2-90,"Game Over");
+	
+	
+//	setfillstyle(8,BLUE);
+//	floodfill(XGameWind/2,YGameWind/2-50,BLUE);
+	
+	getch();
+}
 
 int LVL(int Xprint,int Yprint){
 	initwindow(XWindow,YWindow);
@@ -58,7 +73,7 @@ int LVL(int Xprint,int Yprint){
 				PosX = CursPos.x - WindowPos.left - XFixWind;
 				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
 				if (isLButtonDown()) {
-					return 300;
+					return 400;
 				}
 			}
 			setcolor(0);
@@ -76,7 +91,7 @@ int LVL(int Xprint,int Yprint){
 				PosX = CursPos.x - WindowPos.left - XFixWind;
 				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
 				if (isLButtonDown()) {
-					return 200;
+					return 300;
 				}
 			}
 			setcolor(0);
@@ -94,7 +109,7 @@ int LVL(int Xprint,int Yprint){
 				PosX = CursPos.x - WindowPos.left - XFixWind;
 				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
 				if (isLButtonDown()) {
-					return 100;
+					return 200;
 				}
 			}
 			setcolor(0);
@@ -133,7 +148,7 @@ void game(){
 	}FructPos;
 	SnakePos[0].X=1;
 	SnakePos[0].Y=7;
-	FructPos.RdX=2;
+	FructPos.RdX=1;
 	FructPos.RdY=7;
 	Length=0;
 	Button = 'd';
@@ -145,9 +160,9 @@ void game(){
 		
 		if ((FructPos.RdX==SnakePos[0].X)&&(FructPos.RdY==SnakePos[0].Y)){
 			Length++;
-			SnakePos[Length].X=SnakePos[0].X;
+		/*	SnakePos[Length].X=SnakePos[0].X;
 			SnakePos[Length].Y=SnakePos[0].Y;
-			
+		*/	
 			Rand:;
 			FructPos.RdX=rand()%12;
 			FructPos.RdY=rand()%16;
@@ -193,6 +208,7 @@ void game(){
 		}
 		
 		if (Life==0){
+			GameOver(Speed,Length);
 			return;
 		}
 		
@@ -203,6 +219,8 @@ void game(){
 
 int main(){
 	game();
+//	initwindow(XGameWind,YGameWind);
+	//GameOver(200,10);
 	closegraph();
 	return 0;
 }
