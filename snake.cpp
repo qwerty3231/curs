@@ -2,6 +2,8 @@
 #include <graphics.h>
 #include <stdio.h>
 #include <time.h>
+#include <iostream>
+#include <sstream>
 
 
 const int XWindow = 270;
@@ -17,15 +19,22 @@ bool isLButtonDown()
   return (state & 0x8000) != 0;
 }
 
+
 void GameOver(int Speed, int Length){
 	int Score = (500-Speed)*Length;
+	char Text[16];
 	setcolor(BLUE);
 	rectangle (XGameWind/2-100, YGameWind/2-100, XGameWind/2+100, YGameWind/2);
 	setfillstyle(1,BLACK);
 	floodfill(XGameWind/2,YGameWind/2-50,BLUE);
 	setcolor(WHITE);
 	settextstyle(3,HORIZ_DIR,4);
-	outtextxy(XGameWind/2-83,YGameWind/2-90,"Game Over");
+	outtextxy(XGameWind/2-83,YGameWind/2-95,"Game Over");
+	settextstyle(3,HORIZ_DIR,2);
+	outtextxy(XGameWind/2-50,YGameWind/2-60,"Your Score:");
+	sprintf (Text, "%d", Score);
+	outtextxy(XGameWind/2-25,YGameWind/2-30,Text);
+	
 	
 	
 //	setfillstyle(8,BLUE);
@@ -218,9 +227,10 @@ void game(){
 
 
 int main(){
-	game();
-//	initwindow(XGameWind,YGameWind);
-	//GameOver(200,10);
+	using namespace std;
+	//game();
+	initwindow(XGameWind,YGameWind);
+	GameOver(200,10);
 	closegraph();
 	return 0;
 }
