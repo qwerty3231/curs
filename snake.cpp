@@ -2,8 +2,8 @@
 #include <graphics.h>
 #include <stdio.h>
 #include <time.h>
-#include <iostream>
-#include <sstream>
+//#include <iostream>
+//#include <sstream>
 
 
 const int XWindow = 270;
@@ -19,9 +19,20 @@ bool isLButtonDown()
   return (state & 0x8000) != 0;
 }
 
+void CursXYPos(int &PosX, int &PosY){
+	RECT WindowPos;
+	POINT CursPos;
+	GetWindowRect(GetForegroundWindow(), &WindowPos);
+	GetCursorPos(&CursPos);
+	PosX = CursPos.x - WindowPos.left - XFixWind;
+	PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
+}
+
+void game();
 
 void GameOver(int Speed, int Length){
 	int Score = (500-Speed)*Length;
+	int PosX,PosY;
 	char Text[16];
 	setcolor(BLUE);
 	rectangle (XGameWind/2-100, YGameWind/2-100, XGameWind/2+100, YGameWind/2);
@@ -35,29 +46,62 @@ void GameOver(int Speed, int Length){
 	sprintf (Text, "%d", Score);
 	outtextxy(XGameWind/2-25,YGameWind/2-30,Text);
 	
-	
-	
-//	setfillstyle(8,BLUE);
-//	floodfill(XGameWind/2,YGameWind/2-50,BLUE);
+	setcolor(BLUE);
+	rectangle (XGameWind/2-150, YGameWind/2+35, XGameWind/2-20, YGameWind/2+100);
+	setfillstyle(1,BLACK);
+	floodfill(XGameWind/2-40,YGameWind/2+50,BLUE);
+			
+	rectangle (XGameWind/2+20, YGameWind/2+35, XGameWind/2+150, YGameWind/2+100);
+	setfillstyle(1,BLACK);
+	floodfill(XGameWind/2+40,YGameWind/2+50,BLUE);
+		
+	setcolor(WHITE);
+	outtextxy(XGameWind/2-134, YGameWind/2+55,"New Game");
+	outtextxy(XGameWind/2+38, YGameWind/2+55,"Main Menu");
+	while (true){
+		delay(1);
+		CursXYPos(PosX,PosY);
+		if ((PosX>=(XGameWind/2-150))&&(PosY>=(YGameWind/2-85))&&(PosX<=(XGameWind/2-20))&&(PosY<=(YGameWind/2-20))){
+			setcolor(BLUE);
+			outtextxy(XGameWind/2-134, YGameWind/2+55,"New Game");
+			while ((PosX>=(XGameWind/2-150))&&(PosY>=(YGameWind/2-85))&&(PosX<=(XGameWind/2-20))&&(PosY<=(YGameWind/2-20))){
+				CursXYPos(PosX,PosY);
+				if (isLButtonDown()){
+					closegraph();
+					game();
+					return;
+				}
+			}
+			setcolor(WHITE);
+			outtextxy(XGameWind/2-134, YGameWind/2+55,"New Game");
+		}
+		
+		
+		if ((PosX>=(XGameWind/2+20))&&(PosY>=(YGameWind/2-85))&&(PosX<=(XGameWind/2+150))&&(PosY<=(YGameWind/2-20))){
+			setcolor(BLUE);
+			outtextxy(XGameWind/2+38, YGameWind/2+55,"Main Menu");
+			while ((PosX>=(XGameWind/2+20))&&(PosY>=(YGameWind/2-85))&&(PosX<=(XGameWind/2+150))&&(PosY<=(YGameWind/2-20)))
+				CursXYPos(PosX,PosY);
+			setcolor(WHITE);
+			outtextxy(XGameWind/2+38, YGameWind/2+55,"Main Menu");
+		}
+		
+	}
 	
 	getch();
 }
 
 int LVL(int Xprint,int Yprint){
 	initwindow(XWindow,YWindow);
-//	delay(1000);
 	char *text[]={
 		"Select LVL",	//0
 		"Easy",			//1
 		"Medium",		//2
 		"Hard"			//3
 	};
-
-	RECT WindowPos;
-	POINT CursPos;
 	int PosX,PosY;
-	settextstyle(3,HORIZ_DIR,2);
-	outtextxy(Xprint,Yprint,text[0]);
+	settextstyle(3,HORIZ_DIR,3);
+	outtextxy(Xprint-8,Yprint,text[0]);
 	setcolor(2);
 	settextstyle(3,HORIZ_DIR,1);
 	outtextxy(Xprint+27,Yprint+50,text[1]);
@@ -67,21 +111,15 @@ int LVL(int Xprint,int Yprint){
 	outtextxy(Xprint+27,Yprint+110,text[3]);
 	while (true){
 		delay(1);
-		GetWindowRect(GetForegroundWindow(), &WindowPos);
-		GetCursorPos(&CursPos);
-		PosX = CursPos.x - WindowPos.left - XFixWind;
-		PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;
-		
+		CursXYPos(PosX,PosY);
 		if ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+45)&&(PosY<Yprint+80)){
 			setcolor(15);
 			outtextxy(Xprint+16,Yprint+50,">");
 			outtextxy(Xprint+68,Yprint+50,"<");
 			while ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+45)&&(PosY<Yprint+80)){
-				GetWindowRect(GetForegroundWindow(), &WindowPos);
-				GetCursorPos(&CursPos);
-				PosX = CursPos.x - WindowPos.left - XFixWind;
-				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
+				CursXYPos(PosX,PosY);
 				if (isLButtonDown()) {
+					closegraph();
 					return 400;
 				}
 			}
@@ -95,11 +133,9 @@ int LVL(int Xprint,int Yprint){
 			outtextxy(Xprint+2,Yprint+80,">");
 			outtextxy(Xprint+82,Yprint+80,"<");
 			while ((PosX>Xprint-4)&&(PosX<Xprint+99)&&(PosY>Yprint+75)&&(PosY<Yprint+110)){
-				GetWindowRect(GetForegroundWindow(), &WindowPos);
-				GetCursorPos(&CursPos);
-				PosX = CursPos.x - WindowPos.left - XFixWind;
-				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
+				CursXYPos(PosX,PosY);
 				if (isLButtonDown()) {
+					closegraph();
 					return 300;
 				}
 			}
@@ -113,11 +149,9 @@ int LVL(int Xprint,int Yprint){
 			outtextxy(Xprint+16,Yprint+110,">");
 			outtextxy(Xprint+68,Yprint+110,"<");
 			while ((PosX>Xprint+10)&&(PosX<Xprint+85)&&(PosY>Yprint+110)&&(PosY<Yprint+140)){
-				GetWindowRect(GetForegroundWindow(), &WindowPos);
-				GetCursorPos(&CursPos);
-				PosX = CursPos.x - WindowPos.left - XFixWind;
-				PosY = CursPos.y - WindowPos.bottom+YWindow - YFixWind;	
+				CursXYPos(PosX,PosY);
 				if (isLButtonDown()) {
+					closegraph();
 					return 200;
 				}
 			}
@@ -142,7 +176,6 @@ void PrintCircle(int x, int y, int col){
 
 
 void game(){
-	srand(time(NULL));
 	char Button,_Button;
 	int Speed;
 	int Length;
@@ -162,16 +195,11 @@ void game(){
 	Length=0;
 	Button = 'd';
 	Speed = LVL(80,120);  //default x=80,y=120;
-	closegraph();
-	//printf("%d\n",speed);
 	initwindow(XGameWind,YGameWind); //3:4
 	while (true){
 		
 		if ((FructPos.RdX==SnakePos[0].X)&&(FructPos.RdY==SnakePos[0].Y)){
-			Length++;
-		/*	SnakePos[Length].X=SnakePos[0].X;
-			SnakePos[Length].Y=SnakePos[0].Y;
-		*/	
+			Length++;	
 			Rand:;
 			FructPos.RdX=rand()%12;
 			FructPos.RdY=rand()%16;
@@ -212,8 +240,7 @@ void game(){
 			if ((SnakePos[i].X==SnakePos[0].X)&&(SnakePos[i].Y==SnakePos[0].Y)){
 				Life=0;
 				printf("2");
-			}
-				
+			}		
 		}
 		
 		if (Life==0){
@@ -227,10 +254,12 @@ void game(){
 
 
 int main(){
+	//settextstyle(3,HORIZ_DIR,2);
+	srand(time(NULL));
 	using namespace std;
-	//game();
-	initwindow(XGameWind,YGameWind);
-	GameOver(200,10);
+	game();
+//	initwindow(XGameWind,YGameWind);
+//	GameOver(200,10);
 	closegraph();
 	return 0;
 }
